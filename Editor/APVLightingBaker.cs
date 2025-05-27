@@ -8,7 +8,7 @@ namespace UnityEssentials
 {
     [ExecuteAlways]
     [RequireComponent(typeof(ProbeReferenceVolumeProvider))]
-    public class APVBaker : MonoBehaviour
+    public class APVLightingBaker : MonoBehaviour
     {
         public static bool IsLightmappingInProgress => Lightmapping.isRunning;
 
