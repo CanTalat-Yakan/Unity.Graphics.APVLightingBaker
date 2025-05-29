@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using System.Diagnostics;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Rendering;
@@ -10,30 +9,33 @@ namespace UnityEssentials
     [RequireComponent(typeof(ProbeReferenceVolumeProvider))]
     public class APVLightingBaker : MonoBehaviour
     {
-        public static bool IsLightmappingInProgress => Lightmapping.isRunning;
+        public static bool IsBakingInProgress => Lightmapping.isRunning;
 
         [Button]
         public bool BakeLightingScenario(string scenarioName, bool async = false)
         {
-            if (IsLightmappingInProgress)
+            if (IsBakingInProgress)
                 return false;
 
             if (string.IsNullOrEmpty(scenarioName))
-                UnityEngine.Debug.LogWarning("Scenario name cannot be null or empty.");
+            {
+                Debug.LogWarning("Scenario name cannot be null or empty.");
+                return false;
+            }
 
             if (!AddAndApplyLightingScenario(scenarioName))
             {
-                UnityEngine.Debug.LogWarning($"Failed to add or apply lighting scenario '{scenarioName}'. " +
+                Debug.LogWarning($"Failed to add or apply lighting scenario '{scenarioName}'. " +
                     $"Ensure the Probe Reference Volume is initialized and a baking set is created.");
                 return false;
             }
 
-            var stopwatch = Stopwatch.StartNew();
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             var result = async ? Lightmapping.BakeAsync() : Lightmapping.Bake();
             stopwatch.Stop();
 
             if (result)
-                UnityEngine.Debug.Log($"Successfully baked scenario '{scenarioName}' in {stopwatch.Elapsed.TotalSeconds:0.00} seconds.");
+                Debug.Log($"Successfully baked scenario '{scenarioName}' in {stopwatch.Elapsed.TotalSeconds:0.00} seconds.");
 
             return result;
         }
@@ -43,7 +45,7 @@ namespace UnityEssentials
             var bakingSet = ProbeReferenceVolumeProvider.Volume?.currentBakingSet;
             if (bakingSet == null)
             {
-                UnityEngine.Debug.LogWarning("No baking set found. Ensure the Probe Reference Volume is initialized and a baking set is created.");
+                Debug.LogWarning("No baking set found. Ensure the Probe Reference Volume is initialized and a baking set is created.");
                 return false;
             }
 
@@ -57,7 +59,6 @@ namespace UnityEssentials
         public void ConvertAllMeshesToProbeVolumesGI()
         {
             int convertedCount = 0;
-            // Iterate through all loaded scenes
             for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
             {
                 var scene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
@@ -77,7 +78,7 @@ namespace UnityEssentials
                     }
                 }
             }
-            UnityEngine.Debug.Log($"Converted {convertedCount} MeshRenderers in loaded scenes to receive GI from Probe Volumes.");
+            Debug.Log($"Converted {convertedCount} MeshRenderers in loaded scenes to receive GI from Probe Volumes.");
         }
     }
 }
