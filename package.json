@@ -4,16 +4,20 @@
   "displayName": "UnityEssentials APVLightingBaker",
   "description": "This is a part of the UnityEssentials Ecosystem",
   "unity": "2022.1",
-  "documentationUrl": "",
-  "changelogUrl": "",
-  "licensesUrl": "",
-  "dependencies": " { ",
-  "com.unityessentials.core\": \"1.0.0\" } \"",
-
+  "unityRelease": null,
+  "dependencies": {
+    "com.unityessentials.core": "1.0.0",
+    "com.unityessentials.buttonattribute": "1.0.0"
+  },
   "keywords": [],
   "author": {
     "name": "Unity Essentials",
     "email": "",
     "url": ""
-  }
+  },
+  "documentationUrl": "",
+  "changelogUrl": "",
+  "licensesUrl": "",
+  "samples": [],
+  "hideInEditor": true
 }
